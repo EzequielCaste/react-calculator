@@ -1,11 +1,8 @@
 {
-  "name": "react",
+  "name": "react-calculator",
   "version": "1.0.0",
-  "description": "React example starter project",
-  "keywords": [
-    "react",
-    "starter"
-  ],
+  "description": "Front End Libraries Projects - Build a JavaScript Calculator",
+  "keywords": [],
   "main": "src/index.js",
   "dependencies": {
     "react": "16.12.0",
