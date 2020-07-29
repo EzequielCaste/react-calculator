@@ -12,21 +12,44 @@ export default function App() {
   const regExOperator = /[+,\-,/,*]/;
 
   const [currentDisplay, setDisplay] = useState("0");
+  const [currentOperator, setOperator] = useState("");
+
+  const calculate = {
+    "+": (operand1, operand2) => operand1 + operand2
+  };
 
   function handleOperator(item) {
-    operandos.push(currentDisplay);
-    setDisplay("");
-    console.log(operandos);
+    if (operandos.length === 0) {
+      operandos.push(currentDisplay);
+      operandos.push(item);
+      //console.log(operandos);
+    } else {
+      operandos.push(currentDisplay);
+      console.log(calculate[item](operandos[0], operandos[2]));
+    }
+
+    /*
+    el primer click en un operador sólo GUARDA y ESPERA
+    al proximo operador
+    toma lo que hay en display y guarda
+    fijar el operador actual
+
+    */
   }
 
   function handleNumber(item) {
-    if (currentDisplay === "0") {
+    if (regExOperator.test(operandos[operandos.length - 1])) {
+      //hay operador
+      setDisplay(() => {
+        return item;
+      });
+    } else if (currentDisplay === "0") {
       setDisplay(() => {
         return item;
       });
     } else {
       setDisplay(() => {
-        return currentDisplay.concat(item);
+        return currentDisplay + item;
       });
     }
   }
