@@ -57,3 +57,54 @@ body {
 #clear {
   width: 160px;
 }
+footer {
+  width: 300px;
+  text-align: center;
+  position: absolute;
+  bottom: 0px;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+}
+footer button {
+  line-height: unset;
+}
+footer form {
+  display: inline;
+}
+footer .btn {
+  width: 80px;
+  box-shadow: 0 0;
+  text-decoration: none;
+  cursor: pointer;
+  border: 0;
+  outline: none;
+  background: #f5b700;
+  color: black;
+  padding: 0.5em;
+  position: relative;
+  z-index: 1;
+}
+.fa-heart {
+  color: #f5b700;
+}
+footer .btn::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(230, 230, 230, 0.8);
+  z-index: -1;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 200ms ease-in;
+}
+footer .btn:hover::after {
+  transform: scaleX(1);
+}
+footer .far {
+  margin-left: 0;
+}
