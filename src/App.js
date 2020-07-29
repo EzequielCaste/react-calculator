@@ -1,75 +1,116 @@
 import React, { useState } from "react";
 import "./styles.css";
-import NumberPad from "./components/NumberPad";
-import Display from "./components/Display";
-import Operations from "./components/Operations";
-//import handleOperator from "./js/handleOperator";
-//import handleNumber from "./js/handleNumber";
-
-const operandos = [];
+import Display from "./Display";
+import Pad from "./Pad";
 
 export default function App() {
-  const regExOperator = /[+,\-,/,*]/;
+  const [waitingForOperand, setWaiting] = useState(false);
+  const [value, setValue] = useState(null);
+  const [displayValue, setDisplayValue] = useState("0");
+  const [operator, setOperator] = useState(null);
 
-  const [currentDisplay, setDisplay] = useState("0");
-  const [currentOperator, setOperator] = useState("");
+  function operation(operation) {
+    const inputValue = parseFloat(displayValue);
 
-  const calculate = {
-    "+": (operand1, operand2) => operand1 + operand2
+    if (value === null) {
+      setValue(inputValue);
+    } else if (operator) {
+      const currentValue = value || 0;
+      const newValue = Calculator[operator](currentValue, inputValue);
+      setValue(newValue);
+      setDisplayValue(String(newValue));
+    }
+    setOperator(operation);
+    setWaiting(true);
+  }
+
+  const Calculator = {
+    "+": (num1, num2) => num1 + num2,
+    "-": (num1, num2) => num1 - num2,
+    "/": (num1, num2) => num1 / num2,
+    "*": (num1, num2) => num1 * num2,
+    "=": (num1, num2) => num2
   };
 
-  function handleOperator(item) {
-    if (operandos.length === 0) {
-      operandos.push(currentDisplay);
-      operandos.push(item);
-      //console.log(operandos);
-    } else {
-      operandos.push(currentDisplay);
-      console.log(calculate[item](operandos[0], operandos[2]));
-    }
-
-    /*
-    el primer click en un operador sólo GUARDA y ESPERA
-    al proximo operador
-    toma lo que hay en display y guarda
-    fijar el operador actual
-
-    */
-  }
-
-  function handleNumber(item) {
-    if (regExOperator.test(operandos[operandos.length - 1])) {
-      //hay operador
-      setDisplay(() => {
-        return item;
-      });
-    } else if (currentDisplay === "0") {
-      setDisplay(() => {
-        return item;
+  function digitInput(digit) {
+    if (waitingForOperand) {
+      setWaiting(false);
+      setDisplayValue(() => {
+        return String(value) === displayValue
+          ? String(digit)
+          : displayValue + digit;
       });
     } else {
-      setDisplay(() => {
-        return currentDisplay + item;
+      setDisplayValue(() => {
+        return displayValue === "0" ? String(digit) : displayValue + digit;
       });
     }
   }
-
-  function handleClick(item) {
-    if (isOperator(item)) {
-      handleOperator(item);
-    } else {
-      handleNumber(item);
+  function clear() {
+    setDisplayValue("0");
+    setValue(null);
+    setOperator(null);
+    setWaiting(false);
+  }
+  function decimalInput() {
+    if (!/\./.test(displayValue)) {
+      setDisplayValue(() => {
+        return displayValue + ".";
+      });
+      setWaiting(false);
     }
   }
-  function isOperator(item) {
-    return regExOperator.test(item);
+  function toggleSign() {
+    setDisplayValue(() => {
+      let num = parseFloat(displayValue);
+      return String(num * -1);
+    });
   }
+
   return (
-    <div className="App">
-      <h1>Javascript Calculator</h1>
-      <Display text={currentDisplay} />
-      <NumberPad handleClick={handleClick} />
-      <Operations handleClick={handleClick} />
-    </div>
+    <>
+      <h1>React Calculator</h1>
+      <div className="App">
+        <Display value={displayValue} />
+        <div className="function-keys">
+          <div id="clear" className="btn" onClick={() => clear()}>
+            C
+          </div>
+          <div className="btn" onClick={() => toggleSign()}>
+            ±
+          </div>
+        </div>
+        <div className="digit-keys">
+          <Pad id="seven" handleClick={() => digitInput(7)} num={7} />
+          <Pad id="eight" handleClick={() => digitInput(8)} num={8} />
+          <Pad id="nine" handleClick={() => digitInput(9)} num={9} />
+          <Pad id="four" handleClick={() => digitInput(4)} num={4} />
+          <Pad id="five" handleClick={() => digitInput(5)} num={5} />
+          <Pad id="six" handleClick={() => digitInput(6)} num={6} />
+          <Pad id="one" handleClick={() => digitInput(1)} num={1} />
+          <Pad id="two" handleClick={() => digitInput(2)} num={2} />
+          <Pad id="three" handleClick={() => digitInput(3)} num={3} />
+          <Pad id="zero" handleClick={() => digitInput(0)} num={0} />
+          <Pad id="decimal" handleClick={() => decimalInput()} num={"."} />
+        </div>
+        <div className="operator-keys">
+          <div id="add" className="btn" onClick={() => operation("+")}>
+            +
+          </div>
+          <div id="subtract" className="btn" onClick={() => operation("-")}>
+            -
+          </div>
+          <div id="divide" className="btn" onClick={() => operation("/")}>
+            /
+          </div>
+          <div id="multiply" className="btn" onClick={() => operation("*")}>
+            *
+          </div>
+          <div className="btn" id="equals" onClick={() => operation("=")}>
+            =
+          </div>
+        </div>
+      </div>
+    </>
   );
 }

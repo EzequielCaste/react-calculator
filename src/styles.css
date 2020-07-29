@@ -1,7 +1,59 @@
+* {
+  box-sizing: border-box;
+}
+body {
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  text-align: center;
+  background-color: rgba(210, 180, 140, 0.219);
+}
+#root {
+  margin: 5rem auto;
+  width: 70vw;
+}
 .App {
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(4, 80px);
+  grid-template-rows: repeat(6, 40px);
+  font-size: 2rem;
+  width: 320px;
   font-family: sans-serif;
   text-align: center;
 }
-#result {
-  height: 20px;
+.display {
+  background-color: black;
+  color: white;
+  padding: 0.2rem;
+  grid-column: 1/6;
+}
+.function-keys {
+  background-color: rgb(210, 205, 255);
+  grid-column: 1/4;
+}
+.digit-keys {
+  background-color: white;
+  grid-column: 1/4;
+  grid-row: 3/7;
+}
+.btn,
+.digits {
+  cursor: pointer;
+  border: 1px solid black;
+  width: 80px;
+  height: 40px;
+  display: inline-block;
+}
+.btn:hover {
+  background-color: rgb(247, 246, 246);
+}
+.digits:nth-child(10) {
+  width: 160px;
+}
+.operator-keys {
+  background-color: rgb(255, 233, 205);
+  grid-column: 4;
+  grid-row: 2/7;
+}
+#clear {
+  width: 160px;
 }
